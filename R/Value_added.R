@@ -171,14 +171,14 @@ SUB_REG <- function(.data){
     mutate(account = "ag-investment",
            value = value * conv_MIL_BIL * conv_75_90 / 5) %>%
     select(scenario, region, account, year, value) %>%
-    bind_rows(na_data %>% filter(account %in% c("energy-investment", "consumer-durable", "savings", "capital-stock", "depreciation")) %>%
+    bind_rows(na_data %>% filter(account %in% c("energy-investment", "consumer-durable", "savings", "capital-stock", "depreciation", "capital-net-export")) %>%
                 select(scenario, region, account, year, value)) %>% 
     spread(account, value) %>% 
     mutate(`energy-investment` = `energy-investment` - `ag-investment`,
-           `materials-investment` = savings - `energy-investment` - `consumer-durable` - `ag-investment`,
+           `materials-investment` = savings + `capital-net-export` - `energy-investment` - `consumer-durable` - `ag-investment`,
            # check = (`capital-stock` - (lag(`capital-stock`) - depreciation*5))/5) 
            check = (`capital-stock` - (lag(`capital-stock`) * (1-0.048508)^5))/5) %>% 
-    select(-savings, -`capital-stock`, -depreciation, -check) %>%
+    select(-savings, -`capital-stock`, -depreciation, -check, -`capital-net-export`) %>% 
     gather(account, value, `energy-investment`, `consumer-durable`, `ag-investment`, `materials-investment`) %>%
     filter(year >= 2015) ->
     investment_data
@@ -343,9 +343,9 @@ SUB_REG <- function(.data){
   REG <- "USA"
   SCE_NAME <- "KLENFMF"
   SAM_path <- "output/KLEAM/KLEAM/SAM/"
-  # YEAR <- 2015
+  YEAR <- 2015
   # YEAR <- 2100
-  YEAR <-  2050
+  # YEAR <-  2050
   
 
   
