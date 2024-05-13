@@ -1,0 +1,5 @@
+scenario,region,year,account,value
+KLENFMF,USA,2100,energy-investment,528809.7648
+KLENFMF,USA,2100,consumer-durable,714955
+KLENFMF,USA,2100,ag-investment,53662.23520000001
+KLENFMF,USA,2100,materials-investment,4150903
